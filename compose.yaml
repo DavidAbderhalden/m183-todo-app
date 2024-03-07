@@ -2,14 +2,15 @@ version: '3.9'
 name: m183_lb2
 services:
     db:
-      image: "mariadb:latest"
+      build: ./source
       container_name: m183-lb2-db
+      restart: always
       ports:
         - "3306:3306"
       environment:
         - MARIADB_ROOT_PASSWORD=Some.Real.Secr3t
     web:
-      build: .
+      build: ./todo-list
       container_name: m183-lb2-web
       environment:
         - DBSERVER=m183-lb2-db
