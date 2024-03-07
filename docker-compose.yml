@@ -7,16 +7,16 @@ services:
       restart: always
       ports:
         - "3306:3306"
-      environment:
-        - MARIADB_ROOT_PASSWORD=Some.Real.Secr3t
+      env_file:
+        - ./source/.env
     web:
       build: ./todo-list
       container_name: m183-lb2-web
       environment:
-        - DBSERVER=m183-lb2-db
+        - ./todo-list/.env
       ports:
         - "80:80"
       volumes:
         - type: bind
-          source: C:\Dev\m183-LB2\todo-list
+          source: ./todo-list
           target: /var/www/html
