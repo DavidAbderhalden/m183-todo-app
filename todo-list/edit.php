@@ -15,6 +15,7 @@
     if (isset($_GET['id'])){
         $id = $_GET["id"];
         include 'fw/db.php';
+        // FIXME: SQL-Injection vulnerability?
         $stmt = executeStatement("select ID, title, state from tasks where ID = $id");
         if ($stmt->num_rows > 0) {
             $stmt->bind_result($db_id, $db_title, $db_state);

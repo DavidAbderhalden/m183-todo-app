@@ -129,7 +129,7 @@ COMMIT;
 insert into roles (ID, title) values (2, 'User');
 insert into roles (ID, title) values (1, 'Admin');
 
-
+-- FIXME: Vulnerable hardcoded credentials
 insert into users (ID, username, password) values (1, 'admin1', 'Awesome.Pass34');
 insert into users (ID, username, password) values (2, 'user1', 'Amazing.Pass23');
 
