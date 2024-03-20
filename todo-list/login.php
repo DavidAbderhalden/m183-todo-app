@@ -2,10 +2,15 @@
 require_once 'config.php';
 
 // Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['username']) && isset($_GET['password'])) {
+if ($_SERVER["REQUEST_METHOD"] == "GET"
+    && isset($_GET['username'])
+    && isset($_GET['password'])
+    && isset($_GET['$sign_in_option'])
+) {
     // Get username and password from the form
     $username = $_GET['username'];
     $password = $_GET['password'];
+    $sign_in_option = $_GET['$sign_in_option'];
     
     // Connect to the database
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -44,6 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['username']) && isset($_G
         echo "Username does not exist";
     }
 
+    // TODO: Remove test
+    echo $sign_in_option;
+
     // Close statement
     $stmt->close();
 }
@@ -63,7 +71,39 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['username']) && isset($_G
         <input type="text" id="username" name="username" required><br><br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br><br>
-        <button type="submit">Login</button>
+        <input type="hidden" id="sign_in_option_hidden_input" name="$sign_in_option" value="">
+
+        <button type="submit">Submit</button>
+        <button type="button" id="sign_in_option_toggle_button" onclick="toggleSignIn()"></button>
     </form>
 </body>
 </html>
+
+<script>
+    // variables
+    let isSignInGoogle = false;
+
+    // elements
+    const signInOptionToggleButtonElement = document.querySelector("#sign_in_option_toggle_button");
+    const signInOptionHiddenInputElement = document.querySelector("#sign_in_option_hidden_input");
+
+    // functions
+    function toggleSignIn() {
+        isSignInGoogle = !isSignInGoogle;
+        renderElements();
+    }
+
+    function renderElements() {
+        if (isSignInGoogle) {
+            signInOptionToggleButtonElement.innerText = "Sign Up With Google";
+            signInOptionHiddenInputElement.value = "google"
+        }
+        else {
+            signInOptionToggleButtonElement.innerText = "Sign Up With Email";
+            signInOptionHiddenInputElement.value = "email"
+        }
+    }
+
+    // setup
+    renderElements();
+</script>
