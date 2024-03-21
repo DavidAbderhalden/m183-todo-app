@@ -2,6 +2,8 @@
 require_once 'config.php';
 require_once 'vendor/autoload.php';
 
+session_start();
+
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "GET"
     && isset($_GET['username'])
@@ -34,8 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"
         // Verify the password
         if ($password == $db_password) {
             // Password is correct, store username in session
-            setcookie("username", $username, -1, "/"); // 86400 = 1 day
-            setcookie("userid", $db_id, -1, "/"); // 86400 = 1 day
+            // FIXME: When does the session expire?
+            $_SESSION['username'] = $username;
+            $_SESSION['userid'] = $db_id;
             // Redirect to index.php
             header("Location: index.php");
             exit();
@@ -51,69 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"
     // Close statement
     $stmt->close();
 }
-
-
-/*
-$redirectUrl = 'https://redirectmeto.com/http://localhost/login.php';
-
-$client = new Client();
-$client->setAuthConfig('google.json');
-
-$client->setRedirectUri($redirectUrl);
-$client->addScope([
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email'
-]);
-
-# === SCENARIO 1: PREPARE FOR AUTHORIZATION ===
-if(!isset($_GET['code']) && empty($_SESSION['google_oauth_token'])) {
-    $_SESSION['code_verifier'] = $client->getOAuth2Service()->generateCodeVerifier();
-
-    # Get the URL to Google’s OAuth server to initiate the authentication and authorization process
-    $authUrl = $client->createAuthUrl();
-
-    $connected = false;
-}
-
-
-# === SCENARIO 2: COMPLETE AUTHORIZATION ===
-# If we have an authorization code, handle callback from Google to get and store access token
-if (isset($_GET['code'])) {
-    # Exchange the authorization code for an access token
-    $token = $client->fetchAccessTokenWithAuthCode($_GET['code'], $_SESSION['code_verifier']);
-    $client->setAccessToken($token);
-    $_SESSION['google_oauth_token'] = $token;
-    header('Location: ' . $redirectUrl);
-}
-
-
-# === SCENARIO 3: ALREADY AUTHORIZED ===
-# If we’ve previously been authorized, we’ll have an access token in the session
-if (!empty($_SESSION['google_oauth_token'])) {
-    $client->setAccessToken($_SESSION['google_oauth_token']);
-    if ($client->isAccessTokenExpired()) {
-        $_SESSION['google_oauth_token'] = null;
-        $connected = false;
-    }
-    $connected = true;
-
-    // TODO: Refactor (example of user data retrieval)
-    $oAuth = new Google_Service_Oauth2($client);
-    try {
-        $userData = $oAuth->userinfo_v2_me->get();
-    } catch (\Google\Service\Exception $e) {
-    }
-
-    print($userData->email);
-}
-
-# === SCENARIO 4: TERMINATE AUTHORIZATION ===
-if(isset($_GET['disconnect'])) {
-    $_SESSION['google_oauth_token'] = null;
-    $_SESSION['code_verifier'] = null;
-    header('Location: ' . $redirectUrl);
-}
-*/
 ?>
 
 <!DOCTYPE html>

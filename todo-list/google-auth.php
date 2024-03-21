@@ -27,6 +27,7 @@ $is_sign_out_request = isset($_GET['sign-out']);
 function terminateSession(): void {
     $_SESSION['google_oauth2_access_token'] = null;
     $_SESSION['code_verifier'] = null;
+    $_SESSION['username'] = null;
 }
 
 if ($is_unauthenticated) {
@@ -40,9 +41,8 @@ if ($is_google_callback) {
     $client -> setAccessToken($accessToken);
     $_SESSION['google_oauth2_access_token'] = $accessToken;
 
-    // TODO: Save in db or load existing user
-    // TODO: Redirect
-    header('Location: index.php');
+    // redirects to itself so the user information is loaded
+    header('Location: '.$_SERVER['PHP_SELF']);
 }
 
 if ($is_authenticated) {
@@ -51,11 +51,21 @@ if ($is_authenticated) {
     if ($client -> isAccessTokenExpired()) {
         terminateSession();
     }
+    // load user profile information
+    $oAuth2 = new Google_Service_Oauth2($client);
+    // FIXME: Add try catch
+    $userData = $oAuth2 -> userinfo_v2_me -> get();
+    $username = $userData -> name;
+    $userEmail = $userData -> email;
+
+    // TODO: Check if email in db, add if not present
+    $_SESSION['username'] = $userData -> name;
+    // TODO: Also store user id from db in session
+
+    header('Location: index.php');
 }
 
 if ($is_sign_out_request) {
     terminateSession();
-
-    // TODO: Redirect
+    header('Location: index.php');
 }
-
