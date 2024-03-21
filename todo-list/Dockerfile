@@ -8,7 +8,13 @@ COPY composer.lock composer.lock
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
 RUN composer clear-cache
-RUN composer install --no-interaction --no-scripts --no-suggest
+RUN composer install \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --no-dev \
+    --prefer-dist \
+    --ignore-platform-reqs
 
 COPY . .
 RUN composer dump-autoload
