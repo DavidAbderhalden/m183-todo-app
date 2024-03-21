@@ -1,5 +1,4 @@
 <?php
-
     function executeStatement($statement){
         $conn = getConnection();
         $stmt = $conn->prepare($statement);

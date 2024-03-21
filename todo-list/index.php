@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'session/session.php';
 
 // Check if the user is logged in
 // FIXME: Use session to store use information

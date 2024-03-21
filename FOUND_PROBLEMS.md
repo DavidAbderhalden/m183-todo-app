@@ -8,6 +8,9 @@
 ## Not fixed yet:
 1. Login is a "GET" request... 
 2. Login sets plain text cookies that can be modified
+3. Root user in db
+4. Not hashed passwords in db
+5. Login error response messages
 
 ## To check
 1. Database rights

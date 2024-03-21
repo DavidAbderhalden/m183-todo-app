@@ -1,6 +1,6 @@
 <?php
     // Check if the user is logged in
-    if (!isset($_COOKIE['userid'])) {
+    if (!isset($_SESSION['userid'])) {
         header("Location: /");
         exit();
     }
@@ -20,7 +20,7 @@
   if (isset($_POST['title']) && isset($_POST['state'])){
     $state = $_POST['state'];
     $title = $_POST['title'];
-    $userid = $_COOKIE['userid'];
+    $userid = $_SESSION['userid'];
 
     if ($id == ""){
       $stmt = executeStatement("insert into tasks (title, state, userID) values ('$title', '$state', '$userid')");

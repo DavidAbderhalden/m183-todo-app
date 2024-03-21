@@ -1,5 +1,5 @@
 <?php
-    if (!isset($_COOKIE['username'])) {
+    if (!isset($_SESSION['username'])) {
         header("Location: ../login.php");
         exit();
     }
@@ -10,7 +10,7 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $userid = $_COOKIE['userid'];
+    $userid = $_SESSION['userid'];
 
     // Prepare SQL statement to retrieve user from database
     $stmt = $conn->prepare("select ID, title, state from tasks where UserID = $userid");

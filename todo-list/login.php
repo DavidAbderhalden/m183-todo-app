@@ -1,8 +1,8 @@
 <?php
-require_once 'config.php';
 require_once 'vendor/autoload.php';
 
-session_start();
+include 'fw/db.php';
+include 'session/session.php';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "GET"
@@ -12,29 +12,21 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"
     // Get username and password from the form
     $username = $_GET['username'];
     $password = $_GET['password'];
-    
-    // Connect to the database
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
     // Prepare SQL statement to retrieve user from database
-    $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username='$username'");
+    $stmt = executeStatement("SELECT id, username, password FROM users WHERE username='$username'");
 
-    // Execute the statement
-    $stmt->execute();
-    // Store the result
-    $stmt->store_result();
     // Check if username exists
     if ($stmt->num_rows > 0) {
         // Bind the result variables
         $stmt->bind_result($db_id, $db_username, $db_password);
         // Fetch the result
         $stmt->fetch();
+        if ($password == null) {
+            echo "Username or password is invalid";
+        }
         // Verify the password
-        if ($password == $db_password) {
+        elseif ($password == $db_password) {
             // Password is correct, store username in session
             // FIXME: When does the session expire?
             $_SESSION['username'] = $username;
@@ -44,11 +36,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"
             exit();
         } else {
             // Password is incorrect
-            echo "Incorrect password";
+            echo "Username or password is invalid";
         }
     } else {
         // Username does not exist
-        echo "Username does not exist";
+        echo "Username or password is invalid";
     }
 
     // Close statement

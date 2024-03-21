@@ -11,11 +11,11 @@
 <body>
     <header>
         <div>This is the insecure m183 test app</div>
-        <?php  if (isset($_COOKIE['userid'])) { ?>
+        <?php if (isset($_SESSION['userid'])) { ?>
         <nav>
             <ul>
                 <li><a href="/">Tasks</a></li>
-                <li><a href="/logout.php">Logout</a></li>
+                <li><a href="../google-auth.php?sign-out">Logout</a></li>
             </ul>
         </nav>
         <?php  } ?>

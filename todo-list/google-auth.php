@@ -1,7 +1,8 @@
 <?php
 require_once 'vendor/autoload.php';
 
-session_start();
+include 'session/session.php';
+include 'fw/db.php';
 
 use Google\Client;
 
@@ -24,25 +25,21 @@ $is_google_callback = isset($_GET['code']);
 $is_authenticated = !empty($_SESSION['google_oauth2_access_token']);
 $is_sign_out_request = isset($_GET['sign-out']);
 
-function terminateSession(): void {
-    $_SESSION['google_oauth2_access_token'] = null;
-    $_SESSION['code_verifier'] = null;
-    $_SESSION['username'] = null;
-}
-
 if ($is_unauthenticated) {
     $_SESSION['code_verifier'] = $client -> getOAuth2Service() -> generateCodeVerifier();
     $identityProviderUrl = $client -> createAuthUrl();
-    header('Location: '.$identityProviderUrl);
+    header('location:'.$identityProviderUrl);
 }
 
 if ($is_google_callback) {
-    $accessToken = $client -> fetchAccessTokenWithAuthCode($_GET['code'], $_SESSION['code_verifier']);
+    $code = $_GET['code'];
+    $codeVerifier = $_SESSION['code_verifier'];
+    $accessToken = $client -> fetchAccessTokenWithAuthCode($code, $codeVerifier);
     $client -> setAccessToken($accessToken);
     $_SESSION['google_oauth2_access_token'] = $accessToken;
 
     // redirects to itself so the user information is loaded
-    header('Location: '.$_SERVER['PHP_SELF']);
+    header('location:'.$_SERVER['PHP_SELF']);
 }
 
 if ($is_authenticated) {
@@ -58,14 +55,20 @@ if ($is_authenticated) {
     $username = $userData -> name;
     $userEmail = $userData -> email;
 
-    // TODO: Check if email in db, add if not present
+    // TODO: Email? Double usernames?
+    $selectUsernameStatement = executeStatement("SELECT id FROM users WHERE username='$username'");
+    if ($selectUsernameStatement -> num_rows <= 0) {
+        // FIXME: WTF todo with the password???
+        $insertNewUserStatement = executeStatement("INSERT INTO users (username) VALUES ('$username')");
+    }
+    $selectUsernameStatement -> bind_result($dbUserId);
+    $selectUsernameStatement -> fetch();
+    $_SESSION['userid'] = $dbUserId;
     $_SESSION['username'] = $userData -> name;
-    // TODO: Also store user id from db in session
 
-    header('Location: index.php');
+    header('location:index.php');
 }
 
 if ($is_sign_out_request) {
     terminateSession();
-    header('Location: index.php');
 }
