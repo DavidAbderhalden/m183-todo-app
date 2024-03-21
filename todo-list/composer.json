@@ -19,6 +19,6 @@
     ],
     "require": {
         "ext-mysqli": "*",
-        "google/auth": "^1.37"
+        "google/apiclient": "^2.15"
     }
 }

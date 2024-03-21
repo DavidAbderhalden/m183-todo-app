@@ -8,6 +8,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"
     && isset($_GET['password'])
     && isset($_GET['$sign_in_option'])
 ) {
+    // TODO: Remove test
+    header("Location: google-auth.php");
+    exit();
+
     // Get username and password from the form
     $username = $_GET['username'];
     $password = $_GET['password'];
@@ -49,9 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"
         // Username does not exist
         echo "Username does not exist";
     }
-
-    // TODO: Remove test
-    echo $sign_in_option;
 
     // Close statement
     $stmt->close();
