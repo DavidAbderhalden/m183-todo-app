@@ -7,3 +7,12 @@
 
 ## Not fixed yet:
 1. Login is a "GET" request... 
+2. Login sets plain text cookies that can be modified
+
+## To check
+1. Database rights
+2. Error messages and exceptions
+
+## Testing Keywords
+- DAST
+- SAST

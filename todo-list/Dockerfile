@@ -19,7 +19,7 @@ RUN composer install \
 COPY . .
 RUN composer dump-autoload
 
-FROM php:8.0-apache
+FROM php:8.1-apache
 
 # Enable Apache modules
 RUN a2enmod rewrite
