@@ -142,3 +142,5 @@ fabric.properties
 ### Secrets and configuration files
 **/config.php
 **/.env
+
+/todo-list/vendor/

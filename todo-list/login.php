@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+require_once 'vendor/autoload.php';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "GET"

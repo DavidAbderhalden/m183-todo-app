@@ -1,0 +1,23 @@
+{
+    "name": "david/todo-list",
+    "description": "Simple unsecure todo-app",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "David\\TodoList\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DavidAbderhalden",
+            "email": "david.abderhalden@hotmail.com"
+        },
+        {
+            "name": "LuisHotz",
+            "email": "luis.hotz@edu.tbz.ch"
+        }
+    ],
+    "require": {
+        "ext-mysqli": "*"
+    }
+}
