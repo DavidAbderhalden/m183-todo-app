@@ -1,10 +1,10 @@
 <?php
-    function executeStatement($statement){
+    function executeStatement($statement): array {
         $conn = getConnection();
         $stmt = $conn->prepare($statement);
         $stmt->execute();
         $stmt->store_result();
-        return $stmt;
+        return array($stmt, $conn);
     }
 
     function getConnection()

@@ -5,6 +5,7 @@ include 'session/session.php';
 include 'fw/db.php';
 
 use Google\Client;
+use JetBrains\PhpStorm\NoReturn;
 
 const OAUTH_CONFIG_FILE = 'google.json';
 
@@ -20,29 +21,27 @@ $client -> addScope([
     'https://www.googleapis.com/auth/userinfo.email'
 ]);
 
-$is_unauthenticated = !isset($_GET['code']) && empty($_SESSION['google_oauth2_access_token']);
+$is_unauthenticated = empty($_SESSION['username']) && empty($_SESSION['userid']);
 $is_google_callback = isset($_GET['code']);
-$is_authenticated = !empty($_SESSION['google_oauth2_access_token']);
 $is_sign_out_request = isset($_GET['sign-out']);
 
-if ($is_unauthenticated) {
+
+#[NoReturn] function redirect_to_identity_provider($client): void {
     $_SESSION['code_verifier'] = $client -> getOAuth2Service() -> generateCodeVerifier();
     $identityProviderUrl = $client -> createAuthUrl();
     header('location:'.$identityProviderUrl);
+    exit();
 }
 
-if ($is_google_callback) {
+function handle_google_callback($client): void {
     $code = $_GET['code'];
     $codeVerifier = $_SESSION['code_verifier'];
     $accessToken = $client -> fetchAccessTokenWithAuthCode($code, $codeVerifier);
     $client -> setAccessToken($accessToken);
     $_SESSION['google_oauth2_access_token'] = $accessToken;
-
-    // redirects to itself so the user information is loaded
-    header('location:'.$_SERVER['PHP_SELF']);
 }
 
-if ($is_authenticated) {
+#[NoReturn] function authenticate_client($client): void {
     $accessToken = $_SESSION['google_oauth2_access_token'];
     $client -> setAccessToken($accessToken);
     if ($client -> isAccessTokenExpired()) {
@@ -54,21 +53,33 @@ if ($is_authenticated) {
     $userData = $oAuth2 -> userinfo_v2_me -> get();
     $username = $userData -> name;
     $userEmail = $userData -> email;
+    $dbUserId = null;
 
     // TODO: Email? Double usernames?
-    $selectUsernameStatement = executeStatement("SELECT id FROM users WHERE username='$username'");
-    if ($selectUsernameStatement -> num_rows <= 0) {
-        // FIXME: WTF todo with the password???
-        $insertNewUserStatement = executeStatement("INSERT INTO users (username) VALUES ('$username')");
-    }
+    list($selectUsernameStatement, $_) = executeStatement("SELECT id FROM users WHERE username='$username'");
     $selectUsernameStatement -> bind_result($dbUserId);
     $selectUsernameStatement -> fetch();
+    if ($selectUsernameStatement -> num_rows <= 0) {
+        // FIXME: WTF todo with the password???
+        list($_, $connection) = executeStatement("INSERT INTO users (username) VALUES ('$username')");
+        $dbUserId = $connection -> insert_id;
+    }
     $_SESSION['userid'] = $dbUserId;
     $_SESSION['username'] = $userData -> name;
 
     header('location:index.php');
+    exit();
 }
 
-if ($is_sign_out_request) {
+if ($is_unauthenticated && !$is_google_callback) {
+    redirect_to_identity_provider($client);
+}
+
+if ($is_google_callback) {
+    handle_google_callback($client);
+    authenticate_client($client);
+}
+
+if ($is_sign_out_request && !$is_unauthenticated) {
     terminateSession();
 }

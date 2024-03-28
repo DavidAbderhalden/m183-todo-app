@@ -1,0 +1,30 @@
+version: '3.9'
+name: m183_lb2
+services:
+  db:
+    build: ./source
+    container_name: m183-lb2-db
+    restart: always
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./source/.env
+  web:
+    build:
+      context: ./todo-list
+      dockerfile: Dockerfile.dev
+    container_name: m183-lb2-web
+    environment:
+      - ./todo-list/.env
+    ports:
+      - "80:80"
+    volumes:
+      - type: bind
+        source: ./todo-list
+        target: /var/www/html
+      - type: bind
+        source: ./docker/php/conf.d/xdebug.ini
+        target: /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - type: bind
+        source: ./docker/php/conf.d/error_reporting.ini
+        target: /usr/local/etc/php/conf.d/error_reporting.ini

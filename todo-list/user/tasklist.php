@@ -1,6 +1,6 @@
 <?php
     if (!isset($_SESSION['username'])) {
-        header("Location: ../login.php");
+        header("location:../login.php");
         exit();
     }
     require_once 'config.php';

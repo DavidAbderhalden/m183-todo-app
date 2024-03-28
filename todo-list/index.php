@@ -2,9 +2,8 @@
 include 'session/session.php';
 
 // Check if the user is logged in
-// FIXME: Use session to store use information
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
+    header("location:login.php");
     exit();
 }
 
