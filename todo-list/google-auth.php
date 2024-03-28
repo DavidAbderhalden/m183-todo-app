@@ -9,7 +9,7 @@ use JetBrains\PhpStorm\NoReturn;
 
 const OAUTH_CONFIG_FILE = 'google.json';
 
-$redirectUrl = 'https://redirectmeto.com/http://'.$_SERVER['HTTP_HOST'].'/google-auth.php';
+$redirectUrl = 'https://redirectmeto.com/http://' . $_SERVER['HTTP_HOST'] . '/google-auth.php';
 $identityProviderUrl = null;
 
 $client = new Client();
@@ -29,7 +29,7 @@ $is_sign_out_request = isset($_GET['sign-out']);
 #[NoReturn] function redirect_to_identity_provider($client): void {
     $_SESSION['code_verifier'] = $client -> getOAuth2Service() -> generateCodeVerifier();
     $identityProviderUrl = $client -> createAuthUrl();
-    header('location:'.$identityProviderUrl);
+    header('location:' . $identityProviderUrl);
     exit();
 }
 
