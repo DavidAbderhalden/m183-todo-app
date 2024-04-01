@@ -1,9 +1,9 @@
 version: '3.9'
-name: m183_lb2
+name: m183_lb2-dev
 services:
   db:
     build: ./source
-    container_name: m183-lb2-db
+    container_name: m183-lb2-db-dev
     restart: always
     ports:
       - "3306:3306"
@@ -13,7 +13,8 @@ services:
     build:
       context: ./todo-list
       dockerfile: Dockerfile.dev
-    container_name: m183-lb2-web
+    container_name: m183-lb2-web-dev
+    restart: always
     environment:
       - ./todo-list/.env
     ports:

@@ -4,12 +4,13 @@
 2. default password for database can be found in plain text inside the `docker-compose.yml` file | fixed by outsourcing to external .env file
 3. the initial sql script `m183_lb2.sql` that should be executed at the db startup never selects the database `m183_lb2` | fixed by adding a use statement
 4. more application credentials can be found in the `docker-compose.yml` file | fixed by outsourcing the configuration to a .env file
+5. Instead of using unsecure browser cookies to store user information I implemented session handling. Username and userid are now stored in a session.
+6. 
 
 ## Not fixed yet:
-1. Login is a "GET" request... 
-2. Login sets plain text cookies that can be modified
+1. Login is a "GET" request. Needs to be changed to post
 3. Root user in db
-4. Not hashed passwords in db
+4. Not hashed passwords in db !!
 5. Login error response messages
 
 ## To check
@@ -19,3 +20,7 @@
 ## Testing Keywords
 - DAST
 - SAST
+- CSRF
+- SSRF
+- SQL Injection
+- Cross-Site-Scripting

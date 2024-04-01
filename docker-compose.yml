@@ -12,6 +12,7 @@ services:
     web:
       build: ./todo-list
       container_name: m183-lb2-web
+      restart: always
       environment:
         - ./todo-list/.env
       ports:
