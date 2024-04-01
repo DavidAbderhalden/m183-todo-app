@@ -32,6 +32,9 @@ COPY --from=vendor app/vendor/ /var/www/html/vendor/
 # Enable the mysqli extension
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
+# Ensures no errors are show to the user in prod
+COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+
 # Open port 80
 EXPOSE 	80
 
