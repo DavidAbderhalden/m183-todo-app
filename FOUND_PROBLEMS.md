@@ -5,16 +5,14 @@
 3. the initial sql script `m183_lb2.sql` that should be executed at the db startup never selects the database `m183_lb2` | fixed by adding a use statement
 4. more application credentials can be found in the `docker-compose.yml` file | fixed by outsourcing the configuration to a .env file
 5. Instead of using unsecure browser cookies to store user information I implemented session handling. Username and userid are now stored in a session.
-6. 
+6. The root user is not used anymore by the application, instead a dev user with local rights is being created and its minimum rights configurated inside the m183_lb2.sql file.
 
 ## Not fixed yet:
 1. Login is a "GET" request. Needs to be changed to post
-3. Root user in db
-4. Not hashed passwords in db !!
+4. Not hashed passwords in db
 5. Login error response messages
 
 ## To check
-1. Database rights
 2. Error messages and exceptions
 
 ## Testing Keywords

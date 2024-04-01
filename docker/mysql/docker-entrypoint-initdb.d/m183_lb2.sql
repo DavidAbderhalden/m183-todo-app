@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `m183_lb2`
 --
-CREATE Database m183_lb2;
+CREATE Database IF NOT EXISTS m183_lb2;
 USE m183_lb2;
 
 -- --------------------------------------------------------
@@ -135,3 +135,10 @@ insert into users (ID, username, password) values (2, 'user1', 'Amazing.Pass23')
 
 insert into permissions(ID, userID, roleID) values(null, 1, 1);
 insert into permissions(ID, userID, roleID) values(null, 2, 2);
+
+--
+-- Privileges of dev user
+--
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON m183_lb2.* TO 'dev'@'localhost';
+FLUSH PRIVILEGES;
