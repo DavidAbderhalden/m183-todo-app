@@ -24,23 +24,13 @@ MARIADB_PASSWORD=3a929f2b-aa0c-4243-95e0-907b56eae698
 ### `./docker/php/.env`
 
 ```
-DBSERVER=m183-mysql
+DB_HOST=m183-mysql
+DB_USER=dev
+DB_PASS=3a929f2b-aa0c-4243-95e0-907b56eae698
+DB_NAME=m183_lb2
 ```
 
 Both of these files hold information about the database configuration. 
-
-Also a `./src/config.php` file needs to be provided as well as the `./src/google.json` file, If you want to make use of the google oauth feature.
-
-### `./src/config.php`
-_This will do for dev purposes if you used the .env file example above_
-```php
-<?php
-// Database credentials
-const DB_HOST = 'm183-mysql';
-const DB_USER = 'dev';
-const DB_PASS = '3a929f2b-aa0c-4243-95e0-907b56eae698';
-const DB_NAME = 'm183_lb2';
-```
 
 Make sure you have php composer installed on your local machine and run the following commands inside the `./src` directory:
 ```

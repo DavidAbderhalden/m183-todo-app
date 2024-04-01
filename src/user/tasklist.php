@@ -3,8 +3,14 @@ if (!isset($_SESSION['username'])) {
     header("location:../login.php");
     exit();
 }
-require_once 'config.php';
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+// FIXME: Use special db.php file to execute these statements...
+$db_host = $_ENV["DB_HOST"];
+$db_user = $_ENV["DB_USER"];
+$db_pass = $_ENV["DB_PASS"];
+$db_name = $_ENV["DB_NAME"];
+
+$conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
 // Check connection
 if ($conn -> connect_error) {

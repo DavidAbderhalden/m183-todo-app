@@ -9,6 +9,7 @@
 7. Exceptions where being displayed in a plain text for to the user on a production environment. A custom php.ini file is copied to the apache container now, which prevents that from happening
 8. Login request has been changed from get to post.
 9. Logout request can only be made when logged in now and is a post instead of get request.
+10. `config.php` file is very unsafe and sketchy, changed the app to load env variables directly.
 
 ## Not fixed yet:
 4. Not hashed passwords in db

@@ -5,17 +5,17 @@ services:
     build: ./docker/mysql
     container_name: m183-mysql
     restart: always
-    ports:
-      - "3306:3306"
     env_file:
       - ./docker/mysql/.env
+    ports:
+      - "3306:3306"
   php:
     build:
       context: .
       dockerfile: ./docker/php/Dockerfile
     container_name: m183-php
     restart: always
-    environment:
+    env_file:
       - ./docker/php/.env
     ports:
       - "80:80"

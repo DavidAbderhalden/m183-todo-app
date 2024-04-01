@@ -8,10 +8,11 @@ function executeStatement($statement): array {
 }
 
 function getConnection() {
-    $root = realpath($_SERVER["DOCUMENT_ROOT"]);
-    require_once "$root/config.php";
-    //require_once 'config.php';
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $db_host = $_ENV["DB_HOST"];
+    $db_user = $_ENV["DB_USER"];
+    $db_pass = $_ENV["DB_PASS"];
+    $db_name = $_ENV["DB_NAME"];
+    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
     // Check connection
     if ($conn -> connect_error) {

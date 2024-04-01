@@ -140,7 +140,6 @@ fabric.properties
 # Start of custom .gitignore
 
 ### Secrets and configuration files
-**/config.php
 **/.env
 /src/google.json
 
