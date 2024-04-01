@@ -142,6 +142,6 @@ fabric.properties
 ### Secrets and configuration files
 **/config.php
 **/.env
-/todo-list/google.json
+/src/google.json
 
-/todo-list/vendor/
+/src/vendor/

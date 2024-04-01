@@ -1,23 +1,25 @@
 version: '3.9'
-name: m183_lb2
+name: m183_todo
 services:
-    db:
-      build: ./source
-      container_name: m183-lb2-db
-      restart: always
-      ports:
-        - "3306:3306"
-      env_file:
-        - ./source/.env
-    web:
-      build: ./todo-list
-      container_name: m183-lb2-web
-      restart: always
-      environment:
-        - ./todo-list/.env
-      ports:
-        - "80:80"
-      volumes:
-        - type: bind
-          source: ./todo-list
-          target: /var/www/html
+  mysql:
+    build: ./docker/mysql
+    container_name: m183-mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./docker/mysql/.env
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    container_name: m183-php
+    restart: always
+    environment:
+      - ./docker/php/.env
+    ports:
+      - "80:80"
+    volumes:
+      - type: bind
+        source: ./src
+        target: /var/www/html
