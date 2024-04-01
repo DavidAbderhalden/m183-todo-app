@@ -23,8 +23,6 @@ $client -> addScope([
 
 $is_unauthenticated = empty($_SESSION['username']) && empty($_SESSION['userid']);
 $is_google_callback = isset($_GET['code']);
-$is_sign_out_request = isset($_GET['sign-out']);
-
 
 #[NoReturn] function redirect_to_identity_provider($client): void {
     $_SESSION['code_verifier'] = $client -> getOAuth2Service() -> generateCodeVerifier();
@@ -78,8 +76,4 @@ if ($is_unauthenticated && !$is_google_callback) {
 if ($is_google_callback) {
     handle_google_callback($client);
     authenticate_client($client);
-}
-
-if ($is_sign_out_request && !$is_unauthenticated) {
-    terminateSession();
 }

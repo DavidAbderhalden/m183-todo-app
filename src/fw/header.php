@@ -15,7 +15,11 @@
         <nav>
             <ul>
                 <li><a href="/">Tasks</a></li>
-                <li><a href="../google-auth.php?sign-out">Logout</a></li>
+                <li>
+                    <form action="../session/logout.php" method="post">
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
             </ul>
         </nav>
     <?php } ?>
