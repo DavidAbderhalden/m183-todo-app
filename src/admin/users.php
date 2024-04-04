@@ -6,8 +6,9 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+// FIXME: SQL INJECTION
 list($stmt, $_) = executeStatement("SELECT users.ID, users.username, users.password, roles.title FROM users inner join permissions on users.ID = permissions.userID inner join roles on permissions.roleID = roles.ID order by username");
-
+// values from db are already serialized (no xss danger)
 $db_id = null;
 $db_username = null;
 $db_password = null;
@@ -27,9 +28,8 @@ require_once '../fw/header.php';
         </tr>
         <?php
         // Fetch the result
-        // FIXME: XSS
         while ($stmt -> fetch()) {
-            echo "<tr><td>$db_id</td><td>$db_username</td><td>$db_title</td><input type='hidden' name='password' value='$db_password' /></tr>";
+            echo "<tr><td>$db_id</td><td>$db_username</td><td>$db_title</td></tr>";
         }
         ?>
     </table>

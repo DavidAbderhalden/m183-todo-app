@@ -6,9 +6,9 @@ if (!isset($_POST["provider"]) || !isset($_POST["terms"]) || !isset($_POST["user
     exit("Not enough information provided");
 }
 
-$provider = $_POST["provider"];
-$terms = $_POST["terms"];
-$userid = $_POST["userid"];
+$provider = htmlspecialchars($_POST["provider"], ENT_QUOTES, 'UTF-8');
+$terms = htmlspecialchars($_POST["terms"], ENT_QUOTES, 'UTF-8');
+$userid = htmlspecialchars($_POST["userid"], ENT_QUOTES, 'UTF-8');
 
 sleep(1); // this is a long, long search!!
 
@@ -42,6 +42,7 @@ function callAPI($method, $url, $data) {
 }
 
 
+// FIXME: Have a look at this! Seems very sketchy
 $theurl = 'http://localhost' . $provider . '?userid=' . $userid . '&terms=' . $terms;
 $get_data = callAPI('GET', $theurl, false);
 

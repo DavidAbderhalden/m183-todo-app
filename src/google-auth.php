@@ -59,7 +59,6 @@ function handle_google_callback($client): void {
     $selectUsernameStatement -> bind_result($dbUserId);
     $selectUsernameStatement -> fetch();
     if ($selectUsernameStatement -> num_rows <= 0) {
-        // FIXME: WTF todo with the password???
         list($_, $connection) = executeStatement("INSERT INTO users (username) VALUES ('$username')");
         $dbUserId = $connection -> insert_id;
     }

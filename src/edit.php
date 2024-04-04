@@ -1,5 +1,6 @@
 <?php
 include 'session/session.php';
+include 'fw/db.php';
 include 'fw/headers.php';
 
 // Check if the user is logged in
@@ -11,22 +12,19 @@ if (!isset($_SESSION['userid'])) {
 $options = array("Open", "In Progress", "Done");
 
 // read task if possible
-$title = "";
-$state = "";
-$id = "";
+$db_title = null;
+$db_state = null;
+$serialized_id = null;
 
+// FIXME: Basically every user can edit any task..
 if (isset($_GET['id'])) {
-    $id = $_GET["id"];
-    include 'fw/db.php';
-    $db_id = null;
-    $db_title = null;
-    $db_state = null;
-    list($stmt, $_) = executeStatement("select ID, title, state from tasks where ID = $id");
+    $serialized_id = $serialized_username = htmlspecialchars($_GET["id"], ENT_QUOTES, 'UTF-8');
+
+    // FIXME: SQL INJECTION
+    list($stmt, $_) = executeStatement("select ID, title, state from tasks where ID = $serialized_id");
     if ($stmt -> num_rows > 0) {
-        $stmt -> bind_result($db_id, $db_title, $db_state);
+        $stmt -> bind_result($_, $db_title, $db_state);
         $stmt -> fetch();
-        $title = $db_title;
-        $state = $db_state;
     }
 }
 
@@ -40,17 +38,17 @@ require_once 'fw/header.php';
 <?php } ?>
 
     <form id="form" method="post" action="savetask.php">
-        <input type="hidden" name="id" value="<?php echo $id ?>"/>
+        <input type="hidden" name="id" value="<?php echo $serialized_id ?>"/>
         <div class="form-group">
             <label for="title">Description</label>
-            <input type="text" class="form-control size-medium" name="title" id="title" value="<?php echo $title ?>">
+            <input type="text" class="form-control size-medium" name="title" id="title" value="<?php echo $db_title ?>">
         </div>
         <div class="form-group">
             <label for="state">State</label>
             <select name="state" id="state" class="size-auto">
                 <?php for ($i = 0; $i < count($options); $i++) : ?>
-                    <span><?php $options[1] ?></span>
-                    <option value='<?= strtolower($options[$i]); ?>' <?= $state == strtolower($options[$i]) ? 'selected' : '' ?>><?= $options[$i]; ?></option>
+                    <span><?php ?></span>
+                    <option value='<?= strtolower($options[$i]); ?>' <?= $db_state == strtolower($options[$i]) ? 'selected' : '' ?>><?= $options[$i]; ?></option>
                 <?php endfor; ?>
             </select>
         </div>

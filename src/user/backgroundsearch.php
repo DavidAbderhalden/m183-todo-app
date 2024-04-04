@@ -1,7 +1,6 @@
 <?php
-
 if (!isset($_SESSION['username'])) {
-    header("Location: ../login.php");
+    header("location:../login.php");
     exit();
 }
 ?>
@@ -46,7 +45,7 @@ if (!isset($_SESSION['username'])) {
                         $("#result").show(500);
                     });
                     return false;
-                    //form.submit();
+                    // form.submit();
                 }
             });
         });

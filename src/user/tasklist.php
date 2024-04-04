@@ -7,8 +7,10 @@ if (!isset($_SESSION['username'])) {
 }
 
 $userid = $_SESSION['userid'];
+// FIXME: SQL INJECTION
 list($stmt, $_) = executeStatement("select ID, title, state from tasks where UserID = $userid");
 
+// not endangered of xss, values are serialized on creation
 $db_id = null;
 $db_title = null;
 $db_state = null;
@@ -16,7 +18,7 @@ $db_state = null;
 $stmt -> bind_result($db_id, $db_title, $db_state);
 ?>
 <section id="list">
-    <a href="edit.php">Create Task</a>
+    <a href="../edit.php">Create Task</a>
     <table>
         <tr>
             <th>ID</th>
@@ -30,8 +32,7 @@ $stmt -> bind_result($db_id, $db_title, $db_state);
                 <td class="wide"><?php echo $db_title ?></td>
                 <td><?php echo ucfirst($db_state) ?></td>
                 <td>
-                    <!-- FIXME: Remove bullshit -->
-                    <a href="edit.php?id=<?php echo $db_id ?>">edit</a> | <a href="delete.php?id=<?php echo $db_id ?>">delete</a>
+                    <a href="../edit.php?id=<?php echo $db_id ?>">edit</a>
                 </td>
             </tr>
         <?php } ?>

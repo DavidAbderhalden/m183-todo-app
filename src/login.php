@@ -4,7 +4,6 @@ require_once 'vendor/autoload.php';
 include 'session/session.php';
 include 'fw/headers.php';
 include 'fw/db.php';
-include 'utils/hash.php';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST"
@@ -14,27 +13,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"
     // Get username and password from the form
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $password_hash = get_password_hash($password);
+
+    // login attempt limit (not really secure at all, one can just delete the session and continue)
+    $login_attempts = $_SESSION['login_attempts'] ?? 0;
+    $_SESSION['login_attempts'] = $login_attempts + 1;
+
+    // initialize bind variables
+    $db_id = null;
+    $db_username = null;
+    $db_password = null;
 
     // Prepare SQL statement to retrieve user from database
     list($stmt, $_) = executeStatement("SELECT id, username, password FROM users WHERE username='$username'");
 
     // Check if username exists
-    if ($stmt -> num_rows > 0) {
-        // initialize bind variables
-        $db_id = null;
-        $db_username = null;
-        $db_password = null;
+    if ($stmt -> num_rows > 0 && $login_attempts < 6) {
         // Bind the result variables
         $stmt -> bind_result($db_id, $db_username, $db_password);
         // Fetch the result
         $stmt -> fetch();
-        if ($password == null) {
-            echo "Username or password is invalid";
-        } // Verify the password
-        elseif (password_verify($password_hash, $db_password)) {
+        // Verify the password
+        if (password_verify($password, $db_password)) {
             // Password is correct, store username in session
-            // FIXME: When does the session expire?
             $_SESSION['username'] = $username;
             $_SESSION['userid'] = $db_id;
             // Redirect to index.php
