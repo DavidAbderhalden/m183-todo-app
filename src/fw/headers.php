@@ -7,6 +7,7 @@ function set_cors_headers(): void {
         "style-src 'self';".
         "img-src 'self';"
     );
+    header("X-Content-Type-Options: nosniff");
 }
 
 set_cors_headers();

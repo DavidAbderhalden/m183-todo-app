@@ -7,8 +7,8 @@ if (!isset($_SESSION['username'])) {
 }
 
 $userid = $_SESSION['userid'];
-// FIXME: SQL INJECTION
-list($stmt, $_) = executeStatement("select ID, title, state from tasks where UserID = $userid");
+$sql = "SELECT ID, title, state FROM tasks WHERE UserID = ?";
+list($stmt, $_) = executeStatement($sql, array($userid));
 
 // not endangered of xss, values are serialized on creation
 $db_id = null;

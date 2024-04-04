@@ -29,3 +29,6 @@ services:
       - type: bind
         source: ./docker/php/conf.d/error_reporting.ini
         target: /usr/local/etc/php/conf.d/error_reporting.ini
+      - type: bind
+        source: ./docker/php/.htaccess
+        target: /var/www/html/.htaccess

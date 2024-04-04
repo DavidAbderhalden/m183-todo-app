@@ -16,12 +16,11 @@ $db_title = null;
 $db_state = null;
 $serialized_id = null;
 
-// FIXME: Basically every user can edit any task..
 if (isset($_GET['id'])) {
     $serialized_id = $serialized_username = htmlspecialchars($_GET["id"], ENT_QUOTES, 'UTF-8');
 
-    // FIXME: SQL INJECTION
-    list($stmt, $_) = executeStatement("select ID, title, state from tasks where ID = $serialized_id");
+    $sql = "SELECT ID, title, state FROM tasks WHERE ID = ? AND userID = ?";
+    list($stmt, $_) = executeStatement($sql, array($serialized_id, $_SESSION['userid']));
     if ($stmt -> num_rows > 0) {
         $stmt -> bind_result($_, $db_title, $db_state);
         $stmt -> fetch();

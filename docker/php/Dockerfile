@@ -32,6 +32,10 @@ COPY --from=vendor app/vendor/ /var/www/html/vendor/
 # Enable the mysqli extension
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
+# Custom .htaccess file can be used
+# RUN touch /usr/local/apache2/conf/httpd.conf
+# RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf
+
 # Ensures no errors are show to the user in prod
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 

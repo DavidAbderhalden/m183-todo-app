@@ -37,6 +37,10 @@ RUN docker-php-ext-install mysqli &&  \
     docker-php-ext-enable mysqli && \
     docker-php-ext-enable xdebug
 
+# Custom .htaccess file can be used
+RUN touch /usr/local/apache2/conf/httpd.conf
+RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf
+
 # Open port 80
 EXPOSE 	80
 EXPOSE 9000

@@ -6,15 +6,14 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// FIXME: SQL INJECTION
-list($stmt, $_) = executeStatement("SELECT users.ID, users.username, users.password, roles.title FROM users inner join permissions on users.ID = permissions.userID inner join roles on permissions.roleID = roles.ID order by username");
+$sql = "SELECT users.ID, users.username, roles.title FROM users INNER JOIN permissions ON users.ID = permissions.userID INNER JOIN roles ON permissions.roleID = roles.ID ORDER BY username";
+list($stmt, $_) = executeStatement($sql);
 // values from db are already serialized (no xss danger)
 $db_id = null;
 $db_username = null;
-$db_password = null;
 $db_title = null;
 // Bind the result variables
-$stmt -> bind_result($db_id, $db_username, $db_password, $db_title);
+$stmt -> bind_result($db_id, $db_username, $db_title);
 
 require_once '../fw/header.php';
 ?>

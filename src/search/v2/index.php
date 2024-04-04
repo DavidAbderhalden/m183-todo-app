@@ -8,8 +8,8 @@ if (!isset($_GET["userid"]) || !isset($_GET["terms"])) {
 $userid = htmlspecialchars($_GET["userid"], ENT_QUOTES, 'UTF-8');
 $terms = htmlspecialchars($_GET["terms"], ENT_QUOTES, 'UTF-8');
 
-// FIXME: SQL INJECTION
-list($stmt, $_) = executeStatement("select ID, title, state from tasks where userID = $userid and title like '%$terms%'");
+$sql = "SELECT ID, title, state FROM tasks WHERE userID = ? AND title LIKE '%?%'";
+list($stmt, $_) = executeStatement($sql, array($userid, $terms));
 // values from db are already serialized (no xss danger)
 $db_id = null;
 $db_title = null;

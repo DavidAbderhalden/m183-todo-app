@@ -13,8 +13,8 @@ $id = "";
 // see if the id exists in the database
 if (isset($_POST['id']) && strlen($_POST['id']) != 0) {
     $id = htmlspecialchars($_POST["id"], ENT_QUOTES, 'UTF-8');
-    // FIXME: SQL INJECTION
-    list($stmt, $_) = executeStatement("select ID, title, state from tasks where ID = $id");
+    $sql = "SELECT ID, title, state FROM tasks WHERE ID = ?";
+    list($stmt, $_) = executeStatement($sql, array($id));
     if ($stmt -> num_rows == 0) {
         $id = "";
     }
@@ -28,14 +28,14 @@ if (isset($_POST['title']) && isset($_POST['state'])) {
     $userid = $_SESSION['userid'];
 
     if ($id == "") {
-        // FIXME: SQL INJECTION
-        list($stmt, $_) = executeStatement("insert into tasks (title, state, userID) values ('$title', '$state', '$userid')");
+        $sql = "INSERT INTO tasks (title, state, userID) VALUES (?, ?, ?)";
+        list($stmt, $_) = executeStatement($sql, array($title, $state, $userid));
     } else {
-        // FIXME: SQL INJECTION
-        list($stmt, $_) = executeStatement("update tasks set title = '$title', state = '$state' where ID = $id");
+        $sql = "UPDATE tasks SET title = ?, state = ? WHERE ID = ?";
+        list($stmt, $_) = executeStatement($sql, array($title, $state, $id));
     }
 
-    echo "<span class='info info-success'>Update successfull</span>";
+    echo "<span class='info info-success'>Update successfully</span>";
 } else {
     echo "<span class='info info-error'>No update was made</span>";
 }

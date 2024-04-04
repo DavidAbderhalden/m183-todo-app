@@ -24,7 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"
     $db_password = null;
 
     // Prepare SQL statement to retrieve user from database
-    list($stmt, $_) = executeStatement("SELECT id, username, password FROM users WHERE username='$username'");
+    $sql = "SELECT id, username, password FROM users WHERE username=?";
+    list($stmt, $_) = executeStatement($sql, array($username));
 
     // Check if username exists
     if ($stmt -> num_rows > 0 && $login_attempts < 6) {

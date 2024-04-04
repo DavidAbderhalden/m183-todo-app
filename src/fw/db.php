@@ -1,7 +1,10 @@
 <?php
-function executeStatement($statement): array {
+function executeStatement($statement, $params = array()): array {
     $conn = getConnection();
     $stmt = $conn -> prepare($statement);
+    if ($params) {
+        $stmt->bind_param(str_repeat('s', count($params)), ...$params);
+    }
     $stmt -> execute();
     $stmt -> store_result();
     return array($stmt, $conn);

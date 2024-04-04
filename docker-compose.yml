@@ -23,3 +23,6 @@ services:
       - type: bind
         source: ./src
         target: /var/www/html
+      - type: bind
+        source: ./docker/php/.htaccess
+        target: /var/www/html/.htaccess
