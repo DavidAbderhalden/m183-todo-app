@@ -140,5 +140,8 @@ fabric.properties
 # Start of custom .gitignore
 
 ### Secrets and configuration files
-**/config.php
 **/.env
+/src/google.json
+
+/src/vendor/
+FOUND_SECURITY_ISSUES.md
