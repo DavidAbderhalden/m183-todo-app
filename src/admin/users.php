@@ -1,27 +1,17 @@
 <?php
+include __DIR__.'/../fw/db.php';
+
 if (!isset($_SESSION['username'])) {
     header("Location: ../login.php");
     exit();
 }
 
-// FIXME: Use special db.php file to execute these statements...
-$db_host = $_ENV["DB_HOST"];
-$db_user = $_ENV["DB_USER"];
-$db_pass = $_ENV["DB_PASS"];
-$db_name = $_ENV["DB_NAME"];
+list($stmt, $_) = executeStatement("SELECT users.ID, users.username, users.password, roles.title FROM users inner join permissions on users.ID = permissions.userID inner join roles on permissions.roleID = roles.ID order by username");
 
-$conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
-
-// Check connection
-if ($conn -> connect_error) {
-    die("Connection failed: " . $conn -> connect_error);
-}
-// Prepare SQL statement to retrieve user from database
-$stmt = $conn -> prepare("SELECT users.ID, users.username, users.password, roles.title FROM users inner join permissions on users.ID = permissions.userID inner join roles on permissions.roleID = roles.ID order by username");
-// Execute the statement
-$stmt -> execute();
-// Store the result
-$stmt -> store_result();
+$db_id = null;
+$db_username = null;
+$db_password = null;
+$db_title = null;
 // Bind the result variables
 $stmt -> bind_result($db_id, $db_username, $db_password, $db_title);
 
@@ -37,6 +27,7 @@ require_once '../fw/header.php';
         </tr>
         <?php
         // Fetch the result
+        // FIXME: XSS
         while ($stmt -> fetch()) {
             echo "<tr><td>$db_id</td><td>$db_username</td><td>$db_title</td><input type='hidden' name='password' value='$db_password' /></tr>";
         }

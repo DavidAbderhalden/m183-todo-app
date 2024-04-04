@@ -1,5 +1,6 @@
 <?php
 include 'session/session.php';
+include 'fw/headers.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['userid'])) {

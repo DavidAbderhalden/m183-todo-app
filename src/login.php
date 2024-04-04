@@ -1,8 +1,9 @@
 <?php
 require_once 'vendor/autoload.php';
 
-include 'fw/db.php';
 include 'session/session.php';
+include 'fw/headers.php';
+include 'fw/db.php';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST"

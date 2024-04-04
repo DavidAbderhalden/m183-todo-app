@@ -1,29 +1,17 @@
 <?php
+include __DIR__.'/../fw/db.php';
+
 if (!isset($_SESSION['username'])) {
     header("location:../login.php");
     exit();
 }
 
-// FIXME: Use special db.php file to execute these statements...
-$db_host = $_ENV["DB_HOST"];
-$db_user = $_ENV["DB_USER"];
-$db_pass = $_ENV["DB_PASS"];
-$db_name = $_ENV["DB_NAME"];
-
-$conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
-
-// Check connection
-if ($conn -> connect_error) {
-    die("Connection failed: " . $conn -> connect_error);
-}
 $userid = $_SESSION['userid'];
+list($stmt, $_) = executeStatement("select ID, title, state from tasks where UserID = $userid");
 
-// Prepare SQL statement to retrieve user from database
-$stmt = $conn -> prepare("select ID, title, state from tasks where UserID = $userid");
-// Execute the statement
-$stmt -> execute();
-// Store the result
-$stmt -> store_result();
+$db_id = null;
+$db_title = null;
+$db_state = null;
 // Bind the result variables
 $stmt -> bind_result($db_id, $db_title, $db_state);
 ?>
@@ -42,6 +30,7 @@ $stmt -> bind_result($db_id, $db_title, $db_state);
                 <td class="wide"><?php echo $db_title ?></td>
                 <td><?php echo ucfirst($db_state) ?></td>
                 <td>
+                    <!-- FIXME: Remove bullshit -->
                     <a href="edit.php?id=<?php echo $db_id ?>">edit</a> | <a href="delete.php?id=<?php echo $db_id ?>">delete</a>
                 </td>
             </tr>

@@ -8,6 +8,7 @@ if (!isset($_SESSION['userid'])) {
 }
 $id = "";
 include 'fw/db.php';
+include 'fw/headers.php';
 // see if the id exists in the database
 
 if (isset($_POST['id']) && strlen($_POST['id']) != 0) {

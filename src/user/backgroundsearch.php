@@ -1,10 +1,9 @@
 <?php
+
 if (!isset($_SESSION['username'])) {
     header("Location: ../login.php");
     exit();
 }
-
-include 'fw/db.php';
 ?>
 <section id="search">
     <h2>Search</h2>

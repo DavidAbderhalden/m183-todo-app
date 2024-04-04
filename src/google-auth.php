@@ -2,6 +2,7 @@
 require_once 'vendor/autoload.php';
 
 include 'session/session.php';
+include 'fw/headers.php';
 include 'fw/db.php';
 
 use Google\Client;

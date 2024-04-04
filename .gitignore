@@ -144,3 +144,4 @@ fabric.properties
 /src/google.json
 
 /src/vendor/
+FOUND_SECURITY_ISSUES.md
