@@ -4,6 +4,7 @@ require_once 'vendor/autoload.php';
 include 'session/session.php';
 include 'fw/headers.php';
 include 'fw/db.php';
+include 'utils/hash.php';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST"
@@ -13,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"
     // Get username and password from the form
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $password_hash = get_password_hash($password);
 
     // Prepare SQL statement to retrieve user from database
     list($stmt, $_) = executeStatement("SELECT id, username, password FROM users WHERE username='$username'");
@@ -30,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"
         if ($password == null) {
             echo "Username or password is invalid";
         } // Verify the password
-        elseif ($password == $db_password) {
+        elseif (password_verify($password_hash, $db_password)) {
             // Password is correct, store username in session
             // FIXME: When does the session expire?
             $_SESSION['username'] = $username;
