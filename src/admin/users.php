@@ -1,4 +1,5 @@
 <?php
+include __DIR__.'/../session/session.php';
 include __DIR__.'/../fw/db.php';
 
 if (!isset($_SESSION['username'])) {

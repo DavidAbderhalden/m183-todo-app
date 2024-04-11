@@ -38,6 +38,7 @@ RUN docker-php-ext-install mysqli &&  \
     docker-php-ext-enable xdebug
 
 # Custom .htaccess file can be used
+RUN mkdir -p /usr/local/apache2/conf/
 RUN touch /usr/local/apache2/conf/httpd.conf
 RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf
 
