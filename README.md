@@ -7,7 +7,7 @@ Die Applikation wird im Rahmen der LB2 im [Modul 183](https://gitlab.com/ch-tbz-
 Bevor mit `docker compose up` die Applikation gestartet wird, muss der Source-Pfad für's Volume an Ihre Umgebung angepasst werden (dass die todo-list-Applikation auch korrekt in den Container rein gelinkt wird). Wichtig: die DB wird nicht automatisch erzeugt. Verbinden Sie sich dafür mit einem SQL-Client Ihrer Wahl auf den Datenbankcontainer (localhost port 3306) und verwenden Sie [m183_lb2.sql](src/m183_lb2.sql), um die Datenbank / Datenstruktur zu erzeugen. Beachten Sie, dass die Datenbank nach einem "neu bauen" des Containers wieder weg sein wird und Sie diese nochmals anlegen müssten.
 
 ## Run
-In order to be able to run the application either in production mode or debug mode you have to create two files:
+In order to be able to run the application either in production mode or debug mode you have to create three files:
 
 ### `./docker/mysql/.env`
 
@@ -30,11 +30,16 @@ DB_PASS=3a929f2b-aa0c-4243-95e0-907b56eae698
 DB_NAME=m183_lb2
 ```
 
+### `./src/google.json`
+```
+Contact David Abderhalden to get the contents of this file.
+```
+
 Both of these files hold information about the database configuration. 
 
 Make sure you have php composer installed on your local machine and run the following commands inside the `./src` directory:
 ```
-composer update --no-plattform-reqs
+composer update --ignore-platform-reqs
 composer install
 ```
 
